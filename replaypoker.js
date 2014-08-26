@@ -73,13 +73,6 @@ if (Meteor.isClient) {
               culling: {max: 4}
             }
           }
-        },
-        bar: {
-          width: {
-            ratio: 0.5 // this makes bar width 50% of length between ticks
-          }
-          // or
-          //width: 100 // this makes bar width 100px
         }
       });
     }, 100);
@@ -104,14 +97,6 @@ if (Meteor.isClient) {
     },
     'click input#tables': function () {
       Session.set('view', 'tables');
-    },
-    'click input#update': function () {
-      // template data, if any, is available in 'this'
-      Meteor.call('update', 'rings', function (err, data) {
-        if (err) throw err;
-        console.log(data);
-      });
-      
     }
   });
 
@@ -121,8 +106,22 @@ if (Meteor.isClient) {
 }
 
 if (Meteor.isServer) {
+
+  function updateReplayPockerData() {
+    console.log('update replaypoker data');
+    var toUpdate = 'rings';
+    var result = HTTP.get('http://www.replaypoker.com/' + toUpdate);
+    if (result.statusCode === 304) return result; // nothing change so we do not update database.
+
+    result.data[toUpdate].forEach(saveOrUpdateTableAndUser);
+    Meteor.setTimeout(updateReplayPockerData, 60 * 1000); // every minutes.
+
+  }
+
   Meteor.startup(function () {
-    // code to run on server at startup
+    // init timeout to update data. let 5 seconds to the application before starting
+    Meteor.setTimeout(updateReplayPockerData, 5000);
+    
   });
 
   function convertSeats(seats) {
@@ -238,7 +237,7 @@ if (Meteor.isServer) {
     var
       ids = {userId: user.id, tableId: table.id},
       newHistory = createHistoryFromUser(user, table.id),
-      lastHistory = Histories.findOne(ids, {fields: {last: 1, winChips: 1}}),
+      lastHistory = Histories.findOne(ids, {fields: {last: 1, winChips: 1, histories: 1}}),
       userAvgChips = 0,
       totalTable = 1,
       winChips = 0,
@@ -263,17 +262,24 @@ if (Meteor.isServer) {
     }
 
     newHistory.winChips = newHistory.chips - lastHistory.last.chips;
-    winChips = lastHistory.last.winChips + newHistory.winChips;
+    winChips = lastHistory.histories.reduce(function (win, h) {return win + h.winChips},0);
 
 
     totalWinChips = winChips;
     Histories.find({userId: user.id}, {fields: {winChips: 1}}).fetch().forEach(function (h) {
+      if (h.tableId === table.id) return; // skip current updated table
       totalWinChips += h.winChips;
       totalTable++;
     }); 
 
-    Users.update({id: user.id}, {$set:{avgChips: (totalWinChips/totalTable)|0, winChips: totalWinChips}});
-    Histories.update(ids, {$push: {histories: newHistory}, $set: {last: newHistory, winChips: winChips}});
+    Users.update({id: user.id}, {$set:{
+      avgChips: (totalWinChips/totalTable)|0,
+      winChips: totalWinChips,
+      tables: totalTable
+    }});
+    Histories.update(ids, {
+      $push: {histories: newHistory},
+      $set: {last: newHistory, winChips: winChips}});
 
   }
 

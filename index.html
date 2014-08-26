@@ -12,7 +12,6 @@
 <template name="main">
   <input id="players" type="button" value="Players" />
   <input id="tables" type="button" value="Tables" />
-  <input id="update" type="button" value="update" />
   {{> UI.dynamic template=view data=viewData}}
 </template>
 
@@ -65,6 +64,7 @@
   <div class='userDetail'>
     <h1><img src="{{userAvatar}}" height=24 width=24 > {{username}} <img src="{{flag}}" ></h1>
     <a class="fa fa-external-link" href="http://www.replaypoker.com{{url}}" target="_blank">see replaypoker profile</a>
+    <div>tables played: {{tables}}</div>
     <div>average per table: {{avgChips}} <span class="fa fa-database"></span></div>
     <div>winned on all table: {{winChips}} <span class="fa fa-database"></span></div>
     {{#each tableHistories}}
