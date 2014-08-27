@@ -7,4 +7,5 @@ standard-app-packages
 autopublish
 insecure
 http
-c3
+peernohell:c3
+

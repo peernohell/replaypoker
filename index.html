@@ -1,5 +1,6 @@
 <head>
   <title>replaypoker realtime statistics</title>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 
@@ -70,8 +71,8 @@
 
 <template name="user">
   <div class='user'>
-    <img  src="{{userAvatar}}">
-    <h1> {{username}} <a class="fa fa-external-link" href="http://www.replaypoker.com{{url}}" target="_blank"></a></h1>
+    <img class="avatar"  src="{{userAvatar}}">
+    <h2> {{username}} <a class="fa fa-external-link" href="http://www.replaypoker.com{{url}}" target="_blank"></a></h2>
     <div>Country: <img src="{{flag}}" ></div>
     <div>average: {{{chip avgChips}}}</div>
     <div>winned: {{{chip winChips}}}</div>

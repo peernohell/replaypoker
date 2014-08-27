@@ -124,6 +124,8 @@ if (Meteor.isServer) {
   }
 
   Meteor.startup(function () {
+    // create index for Users winChips
+    Users._ensureIndex({winChips: -1});
     // init timeout to update data. let 5 seconds to the application before starting
     Meteor.setTimeout(updateReplayPockerData, 30 * 1000);
     
@@ -282,9 +284,11 @@ if (Meteor.isServer) {
       winChips: totalWinChips,
       tables: totalTable
     }});
+
     Histories.update(ids, {
       $push: {histories: newHistory},
-      $set: {last: newHistory, winChips: winChips}});
+      $set: {last: newHistory, winChips: winChips}
+    });
 
   }
 
@@ -298,7 +302,6 @@ if (Meteor.isServer) {
       result.data[toUpdate].forEach(saveOrUpdateTableAndUser);
 
       return result;
-
     }
   });
 }

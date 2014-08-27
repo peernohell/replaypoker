@@ -1,10 +1,10 @@
 /* CSS declarations go here */
 body {
-  font-family: sans-serif;
+  font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
   line-height: 1.5;
   color: #424242;
   margin: 20px 0 0 0;;
-  background-color: #c2c2c2;
+  background-color: #e5e5e5;
 }
 
 span.left {
@@ -24,8 +24,9 @@ span.left {
 	width: 340px;
   margin-top: 42px;
   padding-top: 80px;
-	background-color: #484;
+	background-color: #69CC69;
 	color: #EDE;
+  box-shadow: 0 4px 16px black;
 }
 
 .layoutDetail .mainPanel {
@@ -67,16 +68,48 @@ span.left {
   cursor: pointer;
 }
 
-.header input:hover,
 .users .user:hover {
   box-shadow: 0 2px 8px black;
 }
+.header input:hover {
+  box-shadow: 0 1px 2px black;
+}
+
+.header input:focus {
+  outline: none;
+}
+.header input:active {
+  box-shadow: 0 2px 8px black;
+}
+
 
 .user {
 	text-align: center;
 }
+.user img.avatar{
+  height: 66px;
+  width: 66px;
+  border-radius: 50%;
+  border: 6px #424242 dashed;
+}
 
-.user h1 a, .user h1 a:active {
+.user:nth-child(2n) img.avatar{
+  border-color: #cc6969;
+}
+.user:nth-child(5n) img.avatar{
+  border-color: #69cc69;
+}
+
+.user:nth-child(7n) img.avatar{
+  border-style: solid dotted solid dotted;
+}
+
+.user:nth-child(3n) img.avatar{
+  border-style: solid dashed solid dashed !important;
+  border-width: 10px !important;
+}
+
+.user h2 a, .user h2 a:active {
   font-size: 24px;
   text-decoration: none;
   color: blue;
