@@ -3,17 +3,90 @@ body {
   font-family: sans-serif;
   line-height: 1.5;
   color: #424242;
+  margin: 20px 0 0 0;;
+  background-color: #c2c2c2;
+}
+
+span.left {
+  float: right;
 }
 
 #main {
-  max-width: 960px;
-  margin: 20px auto;
+  margin: 50px auto;
 }
 
-.userDetail .tableHistory {
+.layoutDetail .leftPanel {
+	position: fixed;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	height: 100%;
+	width: 340px;
+  margin-top: 42px;
+  padding-top: 80px;
+	background-color: #484;
+	color: #EDE;
+}
+
+.layoutDetail .mainPanel {
+	padding: 0 0 0 340px;
+}
+
+.tables, .users {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.header {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  width: 100%;
+  background-color: white;
+  margin: 0;
+  box-shadow: 0 4px 16px black;
+}
+
+.header input {
+  margin: 10px 0 10px 30px;;
+  padding: 4px;
+  background-color: white;
+  border: none;
+  box-shadow: 0 1px 4px black;
+  cursor: pointer;
+}
+
+.users .user {
+  float:left;
+  width: 28%;
+  height: 256px;
+  margin: 2%;
+  box-shadow: 0 1px 4px black;
+  padding: 20px 0;
+  background-color: white;
+  cursor: pointer;
+}
+
+.header input:hover,
+.users .user:hover {
+  box-shadow: 0 2px 8px black;
+}
+
+.user {
+	text-align: center;
+}
+
+.user h1 a, .user h1 a:active {
+  font-size: 24px;
+  text-decoration: none;
+  color: blue;
+}
+
+.tableHistory {
   width: 40%;
   margin: 2%;
   float: left;
   box-shadow: 0 1px 3px black;
   padding: 10px;
+  background-color: white;
 }

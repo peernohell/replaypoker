@@ -5,6 +5,10 @@ Histories = new Meteor.Collection('histories');
 if (Meteor.isClient) {
   Session.setDefault('view', 'users');
 
+  UI.registerHelper('chip', function (chip) {
+    return chip.toLocaleString() + '&nbsp;<span class="fa fa-empire"></span>';
+  });
+
   Template.tables.nbTables = function () {
     return Tables.find().count();
   };
@@ -14,16 +18,17 @@ if (Meteor.isClient) {
   };
 
   Template.users.nbUsers = function () {
-    return Users.find().count();
+    return Users.find({},{fields: {_id: 1}}).count();
   };
 
   Template.users.users = function () {
-    return Users.find({},{sort: {'winChips': -1}, limit: 20});
+    //return Users.find({},{sort: {winChips: -1}, limit: 10});
+    return Users.find({},{limit: 200});
   };
 
   Template.users.events({
     'click div.user': function () {
-      Session.set('view', 'user');
+      Session.set('view', 'userDetail');
       Session.set('viewData', Users.findOne({id: this.id}));
     }
   });
@@ -36,7 +41,7 @@ if (Meteor.isClient) {
     return url;
   };
 
-  Template.user.tableHistories = function () {
+  Template.userHistories.histories = function () {
     return Histories.find({userId: this.id});
   };
 
@@ -91,7 +96,7 @@ if (Meteor.isClient) {
     return Session.get('viewData');
   };
 
-  Template.main.events({
+  UI.body.events({
     'click input#players': function () {
       Session.set('view', 'users');
     },
@@ -114,13 +119,13 @@ if (Meteor.isServer) {
     if (result.statusCode === 304) return result; // nothing change so we do not update database.
 
     result.data[toUpdate].forEach(saveOrUpdateTableAndUser);
-    Meteor.setTimeout(updateReplayPockerData, 60 * 1000); // every minutes.
+    Meteor.setTimeout(updateReplayPockerData, 90 * 1000); // every minutes.
 
   }
 
   Meteor.startup(function () {
     // init timeout to update data. let 5 seconds to the application before starting
-    Meteor.setTimeout(updateReplayPockerData, 5000);
+    Meteor.setTimeout(updateReplayPockerData, 30 * 1000);
     
   });
 
@@ -266,7 +271,7 @@ if (Meteor.isServer) {
 
 
     totalWinChips = winChips;
-    Histories.find({userId: user.id}, {fields: {winChips: 1}}).fetch().forEach(function (h) {
+    Histories.find({userId: user.id, $gt: {'histories.length': 1}}, {fields: {tableId: 1, winChips: 1}, reactive: false}).fetch().forEach(function (h) {
       if (h.tableId === table.id) return; // skip current updated table
       totalWinChips += h.winChips;
       totalTable++;

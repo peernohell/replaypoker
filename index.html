@@ -4,14 +4,15 @@
 </head>
 
 <body>
+  <div class="header">
+    <input id="players" type="button" value="Players" />
+  </div>
   <div id="main">
     {{> main}}
   </div>
 </body>
 
 <template name="main">
-  <input id="players" type="button" value="Players" />
-  <input id="tables" type="button" value="Tables" />
   {{> UI.dynamic template=view data=viewData}}
 </template>
 
@@ -44,30 +45,43 @@
 </template>
 
 <template name="users">
-  <h1>Users : {{nbUsers}}</h1>
+<div class="users">
   {{#each users}}
-    <div class="user">
-      <h1><img src="{{userAvatar this}}" height=24 width=24 > {{username}} ({{winChips}}) <img src="{{flag}}" ></h1>
-      <a href="http://www.replaypoker.com{{url}}" target="_blank">rp profile</a>
-      <div>average: {{avgChips}} <span class="fa fa-database"></span></div>
-      <div>winned: {{winChips}} <span class="fa fa-database"></span></div>
-    </div>
+    {{> user}}
   {{/each}}
+</div>
 </template>
 
 <template name="userTableHistories">
-  <div>table: {{tableName}} | win: {{winChips}} <span class="fa fa-database"></span></div>
+<div>table: {{tableName}} <span class="left">win: {{{ chip winChips}}}</span></div>
   {{{chart this}}}
 </template>
 
+<template name="userDetail">
+<div class="layoutDetail">
+  <div class="leftPanel">
+    {{> user}}
+  </div>
+  <div class="mainPanel">
+    {{> userHistories}}
+  </div>
+</div>
+</template>
+
 <template name="user">
-  <div class='userDetail'>
-    <h1><img src="{{userAvatar}}" height=24 width=24 > {{username}} <img src="{{flag}}" ></h1>
-    <a class="fa fa-external-link" href="http://www.replaypoker.com{{url}}" target="_blank">see replaypoker profile</a>
-    <div>tables played: {{tables}}</div>
-    <div>average per table: {{avgChips}} <span class="fa fa-database"></span></div>
-    <div>winned on all table: {{winChips}} <span class="fa fa-database"></span></div>
-    {{#each tableHistories}}
+  <div class='user'>
+    <img  src="{{userAvatar}}">
+    <h1> {{username}} <a class="fa fa-external-link" href="http://www.replaypoker.com{{url}}" target="_blank"></a></h1>
+    <div>Country: <img src="{{flag}}" ></div>
+    <div>average: {{{chip avgChips}}}</div>
+    <div>winned: {{{chip winChips}}}</div>
+  </div>
+</template>
+
+<template name="userHistories">
+  <div class="histories">
+    {{ UI.contentBlock}}
+    {{#each histories}}
       <div class="tableHistory">
       {{> userTableHistories}}
       </div>
