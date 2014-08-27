@@ -6,6 +6,18 @@ Meteor.startup(function () {
   
 });
 
+Meteor.methods({
+  update: function (toUpdate) {
+    toUpdate = toUpdate || 'rings';
+    this.unblock();
+    var result = HTTP.get('http://www.replaypoker.com/' + toUpdate);
+    if (result.statusCode === 304) return result; // nothing change so we do not update database.
+
+    result.data[toUpdate].forEach(saveOrUpdateTableAndUser);
+
+    return result;
+  }
+});
 
 function updateReplayPockerData() {
   console.log('update replaypoker data');
@@ -14,7 +26,7 @@ function updateReplayPockerData() {
   if (result.statusCode === 304) return result; // nothing change so we do not update database.
 
   result.data[toUpdate].forEach(saveOrUpdateTableAndUser);
-  Meteor.setTimeout(updateReplayPockerData, 90 * 1000); // every minutes.
+  Meteor.setTimeout(updateReplayPockerData, 60 * 1000); // every minutes.
 
 }
 
@@ -156,12 +168,18 @@ function updateUser(user, table) {
   }
 
   newHistory.winChips = newHistory.chips - lastHistory.last.chips;
-  winChips = lastHistory.histories.reduce(function (win, h) {return win + h.winChips},0);
+  winChips = lastHistory.histories.reduce(function (win, h) {return win + h.winChips},0) + newHistory.winChips;
 
 
   totalWinChips = winChips;
-  Histories.find({userId: user.id, $gt: {'histories.length': 1}}, {fields: {tableId: 1, winChips: 1}, reactive: false}).fetch().forEach(function (h) {
-    if (h.tableId === table.id) return; // skip current updated table
+  Histories.find({userId: user.id}, {fields: {tableId: 1, winChips: 1, histories: 1}, reactive: false}).fetch().forEach(function (h) {
+
+    // skip current updated table
+    if (h.tableId === table.id) return;
+
+    // do not take in account parties without histoires
+    if (h.histories.length <= 1) return;
+
     totalWinChips += h.winChips;
     totalTable++;
   }); 
@@ -176,18 +194,5 @@ function updateUser(user, table) {
     $push: {histories: newHistory},
     $set: {last: newHistory, winChips: winChips}
   });
-
 }
 
-Meteor.methods({
-  update: function (toUpdate) {
-    toUpdate = toUpdate || 'rings';
-    this.unblock();
-    var result = HTTP.get('http://www.replaypoker.com/' + toUpdate);
-    if (result.statusCode === 304) return result; // nothing change so we do not update database.
-
-    result.data[toUpdate].forEach(saveOrUpdateTableAndUser);
-
-    return result;
-  }
-});
