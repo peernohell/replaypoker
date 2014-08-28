@@ -1,3 +1,14 @@
+Meteor.publish('users', function () {
+  return Users.find({},{sort: {winChips: -1}, limit: 24});
+});
+
+Meteor.publish('histories', function () {
+  return Histories.find();
+});
+Meteor.publish('tables', function () {
+  return Tables.find();
+});
+
 Meteor.startup(function () {
   // create index for Users winChips
   Users._ensureIndex({winChips: -1});
@@ -195,4 +206,3 @@ function updateUser(user, table) {
     $set: {last: newHistory, winChips: winChips}
   });
 }
-

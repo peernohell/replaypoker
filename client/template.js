@@ -1,5 +1,9 @@
 Session.setDefault('view', 'users');
 
+Meteor.subscribe('users');
+Meteor.subscribe('histories');
+Meteor.subscribe('tables');
+
 UI.registerHelper('chip', function (chip) {
   return chip.toLocaleString() + '&nbsp;<span class="fa fa-empire"></span>';
 });
@@ -12,13 +16,8 @@ Template.tables.tables = function () {
   return Tables.find({},{sort: {'updatedAt': -1}, limit: 20});
 };
 
-Template.users.nbUsers = function () {
-  return Users.find({},{fields: {_id: 1}}).count();
-};
-
 Template.users.users = function () {
-  //return Users.find({},{sort: {winChips: -1}, limit: 10});
-  return Users.find({},{limit: 200});
+  return Users.find({},{sort: {winChips: -1}});
 };
 
 Template.users.events({
@@ -82,6 +81,12 @@ Template.userTableHistories.chart = function (tabHistory) {
 Template.userTableHistories.rendered = function () {
   console.log('userTableHistories rendered. generate c3');
 }
+
+Template.welcome.events({
+  'click .fa-times': function () {
+    $('#welcome').hide();
+  }
+});
 
 Template.main.view = function () {
   return Session.get('view');
