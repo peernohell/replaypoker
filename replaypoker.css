@@ -1,0 +1,19 @@
+/* CSS declarations go here */
+body {
+  font-family: sans-serif;
+  line-height: 1.5;
+  color: #424242;
+}
+
+#main {
+  max-width: 960px;
+  margin: 20px auto;
+}
+
+.userDetail .tableHistory {
+  width: 40%;
+  margin: 2%;
+  float: left;
+  box-shadow: 0 1px 3px black;
+  padding: 10px;
+}

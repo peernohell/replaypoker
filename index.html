@@ -1,0 +1,76 @@
+<head>
+  <title>replaypoker realtime statistics</title>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="main">
+    {{> main}}
+  </div>
+</body>
+
+<template name="main">
+  <input id="players" type="button" value="Players" />
+  <input id="tables" type="button" value="Tables" />
+  <input id="update" type="button" value="update" />
+  {{> UI.dynamic template=view data=viewData}}
+</template>
+
+<template name="tables">
+  <h1>tables : {{nbTables}}</h1>
+  {{#each tables}}
+    {{> table}}
+  {{/each}}
+</template>
+
+<template name="table">
+  <div class='table'>
+    <h1>{{name}} ({{nbPlayers}} / {{tableSeats}})</h1>
+     <a href="http://www.replaypoker.com{{url}}" target="_blank">see</a>
+    <div>type: {{type}}</div>
+    <div>state: {{state}}</div>
+    <div>players: </div>
+    {{#each seats}}
+      <div>{{username}} ({{id}})</div>
+    {{/each}}
+    <div>
+      histories: {{histories.length}}
+    {{#each histories}}
+      <div>date: {{date}}</div>
+      <div>playersIds: {{playersIds}}</div>
+      <div>seats: {{seats.length}}</div>
+    {{/each}}
+    </div>
+  </div>
+</template>
+
+<template name="users">
+  <h1>Users : {{nbUsers}}</h1>
+  {{#each users}}
+    <div class="user">
+      <h1><img src="{{userAvatar this}}" height=24 width=24 > {{username}} ({{winChips}}) <img src="{{flag}}" ></h1>
+      <a href="http://www.replaypoker.com{{url}}" target="_blank">rp profile</a>
+      <div>average: {{avgChips}} <span class="fa fa-database"></span></div>
+      <div>winned: {{winChips}} <span class="fa fa-database"></span></div>
+    </div>
+  {{/each}}
+</template>
+
+<template name="userTableHistories">
+  <div>table: {{tableName}} | win: {{winChips}} <span class="fa fa-database"></span></div>
+  {{{chart this}}}
+</template>
+
+<template name="user">
+  <div class='userDetail'>
+    <h1><img src="{{userAvatar}}" height=24 width=24 > {{username}} <img src="{{flag}}" ></h1>
+    <a class="fa fa-external-link" href="http://www.replaypoker.com{{url}}" target="_blank">see replaypoker profile</a>
+    <div>average per table: {{avgChips}} <span class="fa fa-database"></span></div>
+    <div>winned on all table: {{winChips}} <span class="fa fa-database"></span></div>
+    {{#each tableHistories}}
+      <div class="tableHistory">
+      {{> userTableHistories}}
+      </div>
+    {{/each}}
+  </div>
+</template>
