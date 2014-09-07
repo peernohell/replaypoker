@@ -13,7 +13,7 @@ Template.tables.nbTables = function () {
 };
 
 Template.tables.tables = function () {
-  return Tables.find({},{sort: {'updatedAt': -1}, limit: 20});
+  return Tables.find({},{sort: {winChips: -1}, limit: 20});
 };
 
 Template.users.users = function () {
@@ -81,12 +81,6 @@ Template.userTableHistories.chart = function (tabHistory) {
 Template.userTableHistories.rendered = function () {
   console.log('userTableHistories rendered. generate c3');
 }
-
-Template.welcome.events({
-  'click .fa-times': function () {
-    $('#welcome').hide();
-  }
-});
 
 Template.main.view = function () {
   return Session.get('view');

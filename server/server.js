@@ -12,22 +12,9 @@ Meteor.publish('tables', function () {
 Meteor.startup(function () {
   // create index for Users winChips
   Users._ensureIndex({winChips: -1});
-  // init timeout to update data. let 5 seconds to the application before starting
-  Meteor.setTimeout(updateReplayPockerData, 30 * 1000);
-  
-});
 
-Meteor.methods({
-  update: function (toUpdate) {
-    toUpdate = toUpdate || 'rings';
-    this.unblock();
-    var result = HTTP.get('http://www.replaypoker.com/' + toUpdate);
-    if (result.statusCode === 304) return result; // nothing change so we do not update database.
-
-    result.data[toUpdate].forEach(saveOrUpdateTableAndUser);
-
-    return result;
-  }
+  // init timeout to update data. let 3 seconds to the application before starting
+  Meteor.setTimeout(updateReplayPockerData, 3 * 1000);
 });
 
 function updateReplayPockerData() {
@@ -37,7 +24,7 @@ function updateReplayPockerData() {
   if (result.statusCode === 304) return result; // nothing change so we do not update database.
 
   result.data[toUpdate].forEach(saveOrUpdateTableAndUser);
-  Meteor.setTimeout(updateReplayPockerData, 60 * 1000); // every minutes.
+  Meteor.setTimeout(updateReplayPockerData, 10 * 1000); // every minutes.
 
 }
 

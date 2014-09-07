@@ -7,26 +7,15 @@ body {
   background-color: #e5e5e5;
 }
 
+.header {
+  text-align: center;
+}
+.header span {
+  line-height: 50px;
+}
+
 span.left {
   float: right;
-}
-
-#welcome h1 {
-  display: inline;
-}
-
-#welcome .fa-times {
-  float: right;
-  cursor: pointer;
-}
-
-#welcome {
-  z-index: 40;
-  margin: 80px auto 20px auto;
-  padding: 20px;
-  width: 920px;
-  background-color: white;
-  box-shadow: 0 4px 16px black;
 }
 
 #main {
@@ -66,8 +55,9 @@ span.left {
 }
 
 .header input {
+  float: left;
   margin: 10px 0 10px 30px;;
-  padding: 4px;
+  padding: 10px 15px;
   background-color: white;
   border: none;
   box-shadow: 0 1px 4px black;
@@ -139,4 +129,73 @@ span.left {
   box-shadow: 0 1px 3px black;
   padding: 10px;
   background-color: white;
+}
+
+/* mobile specifics css*/
+@media all and (max-width:800px) {
+
+  .header {
+    text-align: left;
+  }
+
+  .header input {
+    text-align: center;
+    margin-right: 10px;
+  }
+ 
+  .header span {
+    line-height: 1.5em;
+  }
+
+  .users .user {
+    width: 96%;
+  }
+
+  /* top bar will be wider so we have to adjuste the top padding */
+  #main {
+    margin: 130px auto;
+  }
+
+  .layoutDetail .leftPanel {
+    position: relative;
+    width: 90%;
+    height: 128px;
+    margin: 40px auto;
+    float: initial;
+    padding: 20px 10px;
+  }
+
+  .layoutDetail .leftPanel .user {
+    display: block;
+    padding: 10px 20px;
+    text-align: left;
+  }
+
+  .layoutDetail .leftPanel .user img.avatar {
+    float:left;
+    display:block;
+    margin: 4px 20px;
+  }
+
+  .layoutDetail .leftPanel .user h2 {
+    padding-left: 10px;
+    float: left;
+    width: 69%;
+    margin: 0;
+  }
+
+  .layoutDetail .leftPanel .user div {
+    text-align: center;
+  }
+
+  .layoutDetail .mainPanel {
+    padding: 0;
+  }
+
+  .tableHistory {
+    width: 90%;
+    margin: 20px auto;
+    float: initial;
+  }
+
 }
