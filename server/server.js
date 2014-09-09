@@ -2,16 +2,19 @@ Meteor.publish('users', function () {
   return Users.find({},{sort: {winChips: -1}, limit: 24});
 });
 
-Meteor.publish('histories', function () {
-  return Histories.find();
+Meteor.publish('histories', function (userId) {
+  return Histories.find({userId: userId});
 });
+/*
 Meteor.publish('tables', function () {
   return Tables.find();
 });
+*/
 
 Meteor.startup(function () {
   // create index for Users winChips
   Users._ensureIndex({winChips: -1});
+  Histories._ensureIndex({userId: 1});
 
   // init timeout to update data. let 3 seconds to the application before starting
   Meteor.setTimeout(updateReplayPockerData, 3 * 1000);

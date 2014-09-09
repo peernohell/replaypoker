@@ -1,8 +1,10 @@
 Session.setDefault('view', 'users');
 
 Meteor.subscribe('users');
-Meteor.subscribe('histories');
-Meteor.subscribe('tables');
+//Meteor.subscribe('tables');
+Deps.autorun(function () {
+  Meteor.subscribe('histories', Session.get('userId'));
+});
 
 UI.registerHelper('chip', function (chip) {
   return chip.toLocaleString() + '&nbsp;<span class="fa fa-empire"></span>';
@@ -22,6 +24,7 @@ Template.users.users = function () {
 
 Template.users.events({
   'click div.user': function () {
+    Session.set('userId', this.id);
     Session.set('view', 'userDetail');
     Session.set('viewData', Users.findOne({id: this.id}));
   }
