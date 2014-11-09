@@ -82,7 +82,35 @@ Template.userTableHistories.chart = function (tabHistory) {
 };
 
 Template.userTableHistories.rendered = function () {
-  console.log('userTableHistories rendered. generate c3');
+  var
+  clientId = this.data.clientId,
+  tableId = this.data.tableId,
+  chart = c3.generate({
+    bindto: this.find('.user-table-graph'),
+    data: {
+      x: 'x',
+      columns: [['x'], ['chips']]
+    },
+    axis: {
+      x: {
+        type: 'timeseries',
+        tick: { format: '%Y-%m-%d', culling: { max: 4 } }
+      }
+    }
+  });
+
+  this.autorun(function (tracker) {
+      var histories = Histories
+        .findOne({ clientId: clientId, tableId: tableId })
+        .histories;
+
+      chart.load({
+        columns: [
+          ['x'].concat(histories.map(function (h) {return h.date;})),
+          ['chips'].concat(histories.map(function (h) {return h.chips;}))
+        ]
+      });
+  });
 }
 
 Template.main.view = function () {

@@ -58,7 +58,7 @@
 
 <template name="userTableHistories">
 <div>table: {{tableName}} <span class="left">win: {{{ chip winChips}}}</span></div>
-  {{{chart this}}}
+  <div class="user-table-graph" userId="{{userId}}" tableId="{{tableId}}"></div>
 </template>
 
 <template name="userDetail">
